@@ -1,0 +1,53 @@
+   /// Students Listview
+                BlocBuilder<StudentCubit, StudentState>(
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Student List',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            state.students.isNotEmpty
+                                ? IconButton(
+                                    onPressed: () {
+                                      context
+                                          .read<StudentCubit>()
+                                          .deleteAllStudentsDetails(context);
+                                    },
+                                    icon: const Icon(Icons.delete_sweep))
+                                : const SizedBox()
+                          ],
+                        ),
+                        ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: state.students.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: const EdgeInsets.only(top: 10),
+                                child: StudentView(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  AddStudentPage(
+                                                    studentModel:
+                                                        state.students[index],
+                                                    index: index,
+                                                  )));
+                                    },
+                                    studentModel: state.students[index],
+                                    index: index),
+                              );
+                            }),
+                      ],
+                    );
+                  },
+                ),
